@@ -1,3 +1,4 @@
 {
-    "appName" : "Budgeter"
+    "appName" : "Budgeter",
+    "DEVELOPMENT" : true
 }

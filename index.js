@@ -37,23 +37,30 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var express = require("express");
-var plaidController = require("./controllers/plaid-controller");
+var cors = require("cors");
+var config = require("./config.json");
 var app = express();
-var port = 3000;
-require('dotenv').config();
-console.log(process.env);
+app.use(cors({
+    origin: config.DEVELOPMENT ? "http://localhost:3000" : ""
+}));
+var port = 8080;
+var plaidController = require("./controllers/plaid-controller");
 app.get('/', function (req, res) {
     res.send('Hello World!');
 });
-app.get('/create_link_token', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var _a, _b;
-    return __generator(this, function (_c) {
-        switch (_c.label) {
+app.post('/create_link_token', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var _a, _b, _c;
+    var _d;
+    return __generator(this, function (_e) {
+        switch (_e.label) {
             case 0:
                 _b = (_a = res).send;
+                _d = {};
+                _c = "token";
                 return [4 /*yield*/, plaidController.createLinkToken()];
             case 1:
-                _b.apply(_a, [_c.sent()]);
+                _b.apply(_a, [(_d[_c] = _e.sent(),
+                        _d)]);
                 return [2 /*return*/];
         }
     });
