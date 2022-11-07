@@ -1,7 +1,9 @@
 import {
     Transaction
 } from '../types'
-import * as puppeteer from 'puppeteer'
+import * as dotenv from "dotenv";
+dotenv.config();
+import * as puppeteer from 'puppeteer-core'
 /**Loads chase transactions from a specified date onward */
 export async function loadChaseTransactions(
     accountId : number, 
@@ -9,7 +11,9 @@ export async function loadChaseTransactions(
     sinceMonth : number, 
     sinceDay : number
 ) : Promise<void>{
-    const browser = await puppeteer.launch({headless : "chrome"});
+    const browser = await puppeteer.launch({
+        executablePath: process.env.PUPPETEER_EXECUTABLE_PATH
+    })
     const page = await browser.newPage();
     await page.goto('https://google.com');
     await page.pdf({path: 'google.pdf'});
