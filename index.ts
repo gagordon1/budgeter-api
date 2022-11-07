@@ -1,8 +1,14 @@
 import * as express from "express";
 import * as cors from "cors";
-import { LoadTransactionsRequest } from "./types";
 import { 
-  loadChaseTransactions 
+  LoadTransactionsRequest,
+  GetTransactionsRequest,
+  GetTransactionsResponse,
+  Transaction 
+} from "./types";
+import { 
+  loadChaseTransactions,
+  getChaseTransactions 
 } from './controllers/bank-controllers'
 import { BadRequestError, BankAccessError } from "./errors";
 const config = require("./config.json")
@@ -35,6 +41,29 @@ app.put('/transactions,', async (req, res) =>{
     }else{
       res.status(500).send("Internal server error encountered.")
     }
+  }
+  
+})
+
+app.get('/transactions,', async (req, res) =>{
+  const data = req.params as GetTransactionsRequest
+  try {
+    const transactions : Transaction[] = await getChaseTransactions(
+      data.accountId,
+      data.sinceYear,
+      data.sinceMonth,
+      data.sinceDay
+    )
+    res.send({
+      transactions : transactions
+    } as GetTransactionsResponse)
+  } catch (e) {
+      console.log(e)
+      if (e instanceof BadRequestError){
+        res.status(400).send(e.message)
+      }else{
+        res.status(500).send("Internal server error encountered.")
+      }
   }
   
 })
