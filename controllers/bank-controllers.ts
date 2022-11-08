@@ -1,29 +1,34 @@
-import {
-    Transaction
-} from '../types'
+import { Transaction, BankId } from "../types"
+import { BANKS } from '../global'
+import { loadChaseTransactions } from "./bank-functions/load-chase-transactions"
 import * as dotenv from "dotenv";
 dotenv.config();
-import * as puppeteer from 'puppeteer-core'
-/**Loads chase transactions from a specified date onward */
-export async function loadChaseTransactions(
+
+export async function loadBankTransactions(
+    bankId : BankId,
     accountId : number, 
+    username : string,
+    password : string,
     sinceYear : number,
     sinceMonth : number, 
     sinceDay : number
 ) : Promise<void>{
-    const browser = await puppeteer.launch({
-        executablePath: process.env.PUPPETEER_EXECUTABLE_PATH
-    })
-    const page = await browser.newPage();
-    await page.goto('https://google.com');
-    await page.pdf({path: 'google.pdf'});
-
-    await browser.close();
+    switch(bankId){
+        case BANKS.CHASE_BANK:
+            loadChaseTransactions(
+                accountId,
+                username,
+                password,
+                sinceYear,
+                sinceMonth,
+                sinceDay
+            )
+    }
 }
 
-
 /**Loads chase transactions from a specified date onward */
-export async function getChaseTransactions(
+export async function getBankTransactions(
+    bankId : BankId,
     accountId : number, 
     sinceYear : number,
     sinceMonth : number, 
@@ -31,12 +36,19 @@ export async function getChaseTransactions(
 ) : Promise<Transaction[]>{
     return []
 }
+
+
 const accountId = 1
 const sinceYear = 2022
 const sinceMonth = 6
 const sinceDay = 7
-loadChaseTransactions(
+const username = process.env.CHASE_USERNAME
+const password = process.env.CHASE_PASSWORD
+loadBankTransactions(
+    0,
     accountId,
+    username,
+    password,
     sinceYear,
     sinceMonth,
     sinceDay

@@ -1,10 +1,14 @@
-type BankId = 0 | 1
+export type BankId = 0 | 1
 
 export interface LoadTransactionsRequest{
     /**account id for the bank account */
     accountId : number,
     /**budgeter internal id for the bank */
     bankId : BankId,
+    /**bank username */
+    username : string,
+    /**bank password */
+    password : string,
     /**YYYY year to start pulling transactions */
     sinceYear : number,
     /**month to start pulling transactions (1-12)*/

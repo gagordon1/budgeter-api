@@ -7,8 +7,8 @@ import {
   Transaction 
 } from "./types";
 import { 
-  loadChaseTransactions,
-  getChaseTransactions 
+  loadBankTransactions,
+  getBankTransactions
 } from './controllers/bank-controllers'
 import { BadRequestError, BankAccessError } from "./errors";
 const config = require("./config.json")
@@ -25,8 +25,11 @@ app.get('/', (req, res) => {
 app.put('/transactions,', async (req, res) =>{
   const data : LoadTransactionsRequest = req.body
   try {
-    await loadChaseTransactions(
+    await loadBankTransactions(
+      data.bankId,
       data.accountId,
+      data.username,
+      data.password,
       data.sinceYear,
       data.sinceMonth,
       data.sinceDay
@@ -48,7 +51,8 @@ app.put('/transactions,', async (req, res) =>{
 app.get('/transactions,', async (req, res) =>{
   const data = req.params as GetTransactionsRequest
   try {
-    const transactions : Transaction[] = await getChaseTransactions(
+    const transactions : Transaction[] = await getBankTransactions(
+      data.bankId,
       data.accountId,
       data.sinceYear,
       data.sinceMonth,
